@@ -1,7 +1,7 @@
 <h1 align="center">Pathfinder</h1>
 <p align="center">
     <a>
-        <img src="https://img.shields.io/badge/release-v1.2.1-red" alt="Latest release"/>
+        <img src="https://img.shields.io/badge/release-v1.2.2-red" alt="Latest release"/>
     </a>
 </p>
 

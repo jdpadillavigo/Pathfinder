@@ -57,6 +57,9 @@ public:
     // Método para reiniciar la grilla, puede reiniciar celdas bloqueadas y las celdas de origen/destino
     void reiniciar(bool reiniciarBloqueados = false, bool reiniciarOrigenDestino = false);
 
+    // Método para reiniciar las estructuras específicas del algoritmo D* Lite
+    void reiniciarAlgoritmoDStarLite();
+
     // Función de búsqueda BFS
     bool BFS(Celda& origen, Celda& destino);
 

@@ -158,7 +158,7 @@ public class Programa extends JPanel {
         g.drawString(titulo, xTitulo, 40);
 
         // Instrucciones detalladas para el usuario
-        g.setFont(new Font("Arial", Font.PLAIN, 14));
+        g.setFont(new Font("Arial", Font.BOLD, 14));
         g.setColor(Color.LIGHT_GRAY);
         String[] instrucciones = {
             "Instrucciones:",

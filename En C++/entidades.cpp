@@ -98,6 +98,18 @@ void Grid::reiniciar(bool reiniciarBloqueados, bool reiniciarOrigenDestino) {
     }
 }
 
+// Método para reiniciar las estructuras específicas del algoritmo D* Lite
+void Grid::reiniciarAlgoritmoDStarLite() {
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            Celda& celda = obtenerCelda(i, j);
+            celda.g = INFINITY;  // Reiniciar el costo acumulado
+            celda.f = INFINITY;  // Reiniciar el costo de la solución
+            celda.padre = nullptr;  // Reiniciar el predecesor
+        }
+    }
+}
+
 // Función de búsqueda BFS
 bool Grid::BFS(Celda& origen, Celda& destino) {
     reiniciar(); // Restablecer el estado de todas las celdas antes de comenzar la búsqueda
@@ -202,6 +214,10 @@ bool Grid::DStarLite(Celda& origen, Celda& destino) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0) continue; // No procesamos la celda actual
+
+                // Solo exploramos celdas ortogonales (sin diagonales)
+                if (i != 0 && j != 0) continue;
+
                 int nuevaFila = actual->fila + i;
                 int nuevaColumna = actual->columna + j;
 

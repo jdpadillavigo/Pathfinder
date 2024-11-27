@@ -75,7 +75,7 @@ public class Cuadricula {
             }
 
             // Explorar los vecinos de la celda actual
-            for (Celda vecino : obtenerVecinos(actual, false)) { // BFS en 4 direcciones (sin diagonales)
+            for (Celda vecino : obtenerVecinos(actual)) { // BFS en 4 direcciones (sin diagonales)
                 if (!vecino.isVisitada() && vecino.getEstado() != Celda.BLOQUEADA) {
                     vecino.setVisitada(true); // Marcar como visitado
                     vecino.setPadre(actual); // Establecer la celda actual como el padre del vecino
@@ -233,14 +233,14 @@ public class Cuadricula {
         return Math.max(dx, dy); // Distancia octile
     }
 
-    // Obtener los sucesores de una celda, considerando diagonales si es necesario
+    // Obtener los sucesores de una celda
     private List<Celda> obtenerSucesores(Celda celda) {
-        return obtenerVecinos(celda, true); // D* Lite usa 8 direcciones (diagonales incluidas)
+        return obtenerVecinos(celda);
     }
 
-    // Obtener los predecesores de una celda, considerando diagonales si es necesario
+    // Obtener los predecesores de una celda
     private List<Celda> obtenerPredecesores(Celda celda) {
-        return obtenerVecinos(celda, true); // D* Lite usa 8 direcciones (diagonales incluidas)
+        return obtenerVecinos(celda);
     }
 
     // Comprobar si el entorno ha cambiado (en este caso, siempre retorna false)
@@ -253,39 +253,28 @@ public class Cuadricula {
         if (b.getEstado() == Celda.BLOQUEADA) {
             return Float.POSITIVE_INFINITY; // No se puede mover a una celda bloqueada
         }
-        // Si el movimiento es diagonal, el costo es 1.4; si es ortogonal, es 1.0
+        // Si el movimiento es ortogonal, el costo es 1.0
         int dx = Math.abs(a.getFila() - b.getFila());
         int dy = Math.abs(a.getColumna() - b.getColumna());
-        if (dx == 1 && dy == 1) {
-            return 1.4f; // Movimiento diagonal
-        } else {
+        if ((dx == 1 && dy == 0) || (dx == 0 && dy == 1)) {
             return 1.0f; // Movimiento ortogonal
         }
+        return Float.POSITIVE_INFINITY;
     }
 
-    // Obtener los vecinos de una celda, considerando si se deben incluir las diagonales
-    private List<Celda> obtenerVecinos(Celda celda, boolean incluirDiagonales) {
+    // Obtener los vecinos de una celda
+    private List<Celda> obtenerVecinos(Celda celda) {
         List<Celda> vecinos = new ArrayList<>();
         int fila = celda.getFila();
         int columna = celda.getColumna();
 
-        // Definir las direcciones según si se deben incluir las diagonales
-        int[][] direcciones;
-        if (incluirDiagonales) {
-            // 8 direcciones (diagonales incluidas)
-            direcciones = new int[][]{
-                {-1, -1}, {-1, 0}, {-1, 1},
-                {0, -1},          {0, 1},
-                {1, -1},  {1, 0},  {1, 1}
-            };
-        } else {
-            // 4 direcciones (sin diagonales)
-            direcciones = new int[][]{
-                {-1, 0},
-                {0, -1},        {0, 1},
-                {1, 0}
-            };
-        }
+        // Definir las direcciones solo ortogonales (sin diagonales)
+        int[][] direcciones = new int[][]{
+            {-1, 0},  // Arriba
+            {0, -1},  // Izquierda
+            {0, 1},   // Derecha
+            {1, 0}    // Abajo
+        };
 
         // Agregar los vecinos válidos
         for (int[] dir : direcciones) {
@@ -309,7 +298,7 @@ public class Cuadricula {
         double cpuUsado = (cpuFin - cpuInicio) / 1e6; // Convertir a milisegundos
 
         // Mostrar resultados de rendimiento
-        System.out.println("\n--- Resultados de Tiempo de Ejecucion " + algoritmo + " ---");
+        System.out.println("\n--- Resultados de Tiempo de Ejecución " + algoritmo + " ---");
         System.out.printf("Tiempo de ejecución: %.3f ms\n", tiempoEjecucion);
         System.out.printf("Tiempo de CPU utilizado: %.3f ms\n", cpuUsado);
         System.out.println("Uso de memoria RAM: " + memoriaUsada + " KB");

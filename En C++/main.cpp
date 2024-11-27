@@ -166,6 +166,13 @@ int main() {
             tiempoDStarInicio = std::chrono::high_resolution_clock::now();
             cpuDStarInicio = std::clock();
             grid.reiniciar();
+
+            // Reiniciar el estado de las celdas origen y destino
+            origen->estado = ORIGEN;
+            destino->estado = DESTINO;
+
+            grid.reiniciarAlgoritmoDStarLite();
+
             // Medir uso de memoria antes de D* Lite
             size_t memoriaAntesDStar = getCurrentRSS();
             if (grid.DStarLite(*origen, *destino)) {

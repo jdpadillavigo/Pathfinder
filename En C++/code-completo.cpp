@@ -177,6 +177,18 @@ public:
         }
     }
 
+    // Método para reiniciar las estructuras específicas del algoritmo D* Lite
+    void reiniciarAlgoritmoDStarLite() {
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                Celda& celda = obtenerCelda(i, j);
+                celda.g = INFINITY;  // Reiniciar el costo acumulado
+                celda.f = INFINITY;  // Reiniciar el costo de la solución
+                celda.padre = nullptr;  // Reiniciar el predecesor
+            }
+        }
+    }
+
     // Función de búsqueda BFS
     bool BFS(Celda& origen, Celda& destino) {
         reiniciar(); // Restablecer el estado de todas las celdas antes de comenzar la búsqueda
@@ -280,6 +292,10 @@ public:
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     if (i == 0 && j == 0) continue; // No procesamos la celda actual
+
+                    // Solo exploramos celdas ortogonales (sin diagonales)
+                    if (i != 0 && j != 0) continue;
+
                     int nuevaFila = actual->fila + i;
                     int nuevaColumna = actual->columna + j;
 
@@ -466,6 +482,13 @@ int main() {
             tiempoDStarInicio = std::chrono::high_resolution_clock::now();
             cpuDStarInicio = std::clock();
             grid.reiniciar();
+
+            // Reiniciar el estado de las celdas origen y destino
+            origen->estado = ORIGEN;
+            destino->estado = DESTINO;
+
+            grid.reiniciarAlgoritmoDStarLite();
+
             // Medir uso de memoria antes de D* Lite
             size_t memoriaAntesDStar = getCurrentRSS();
             if (grid.DStarLite(*origen, *destino)) {
