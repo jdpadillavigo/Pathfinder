@@ -37,7 +37,7 @@ size_t getCurrentRSS() {
     PROCESS_MEMORY_COUNTERS info;
     GetProcessMemoryInfo(GetCurrentProcess(), &info, sizeof(info)); // Obtener memoria usada por el proceso
     return (size_t)info.WorkingSetSize; // Retornar el uso de memoria
-#else
+#else //Sino
     long rss = 0L;
     FILE* fp = nullptr;
     if ((fp = fopen("/proc/self/statm", "r")) == nullptr)
